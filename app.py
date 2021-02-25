@@ -2,10 +2,12 @@ import os
 from flask import Flask, render_template, request, jsonify
 from compare_faces import compare
 import requests
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config["IMAGE_UPLOADS"] = ""
-port = int(os.environ.get("PORT", 7000))
+CORS(app)
+# port = int(os.environ.get("PORT", 7000))
 # url = 'https://crm-emotion-rec.herokuapp.com/emotion_recognizer'
 image2 = 'image1.jpeg'
 
@@ -13,7 +15,7 @@ image2 = 'image1.jpeg'
 def index():
     return render_template('index.html')
 
-# "@app.route('/face_recognizer', methods = ['GET', 'POST'])
+# @app.route('/face_recognizer', methods = ['GET', 'POST'])
 # def recocnize_faces():
 #    if request.method == 'POST':
 #        image1 = request.files['image1']
@@ -34,9 +36,10 @@ def index():
 #            return jsonify(
 #                ImageProfile=image1.filename,
 #                ImageWebcam=image2.filename,
-#                response=response)"
-#
+#                response=response)
+
 @app.route('/face_noFace', methods = ['GET', 'POST'])
+@cross_origin()
 def face_or_other():
    if request.method == 'POST':
        image1 = request.files['image1']
@@ -50,4 +53,4 @@ def face_or_other():
                response='no_face')
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0',port=port)
+    app.run()
